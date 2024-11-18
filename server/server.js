@@ -4,7 +4,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
+const { createServer } = require("node:http");
+const { join } = require("node:path");
+const { Server } = require("socket.io");
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
 
 app.use(cors());
 app.use(express.json());
@@ -19,10 +24,18 @@ mongoose
 
 // Default route
 app.get("/", (req, res) => {
-  res.send("API is running...");
+  res.sendFile(join(__dirname, "index.html"));
 });
+
+//Socket connection
+io.on('connection', (socket) => {
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+});
+
 //Auth Route
 app.use("/api/auth", authRouter);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

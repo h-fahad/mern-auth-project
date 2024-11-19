@@ -5,8 +5,11 @@ import axiosInstance from "./axiosInstance";
 // Login function
 export const login = async (email, password) => {
   const response = await axiosInstance.post("/auth/login", { email, password });
-  console.log(email, password, "here", response);
   return response.data;
+};
+
+export const logout = async () => {
+  localStorage.removeItem("token");
 };
 
 // Signup function

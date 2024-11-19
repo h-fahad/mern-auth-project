@@ -14,10 +14,10 @@ const App = () => {
 
   // Function to render routes based on protection status
   const renderRoute = (route) => {
-    if (route.protected && !isAuthenticated) {
-      // Redirect to login if not authenticated
-      return <Navigate to="/login" replace />;
-    }
+    // if (route.protected && !isAuthenticated) {
+    //   // Redirect to login if not authenticated
+    //   return <Navigate to="/login" replace />;
+    // }
     const Component = route.component;
     return <Component />;
   };

@@ -76,7 +76,7 @@ export default function Sidebar() {
         setAlert({ type: "success", message: "Logout successful!" });
         setTimeout(() => {
             navigate("/login");
-        }, 2000); // 2 seconds del
+        }, 2000); // 2 seconds delay
     }
     return (
         <Sheet

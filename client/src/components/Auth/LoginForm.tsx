@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CssVarsProvider, extendTheme, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
@@ -21,6 +21,7 @@ import GoogleIcon from "./GoogleIcon.tsx";
 import { isValidEmail, isValidPassword } from "../../utils/validators.js";
 import { login } from "../../utils/authService";
 import AlertMessage from "../Alert.js";
+import AuthContext from "../../context/AuthContext.js";
 
 function ColorSchemeToggle(props: IconButtonProps) {
   const { onClick, ...other } = props;
@@ -51,6 +52,8 @@ const customTheme = extendTheme({ defaultColorScheme: "dark" });
 export default function JoySignInSideTemplate() {
   const [alert, setAlert] = useState({ type: "", message: "" });
   const navigate = useNavigate();
+  const { saveLogin } = useContext(AuthContext);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -79,9 +82,12 @@ export default function JoySignInSideTemplate() {
       // Attempt login
       const result = await login(email, password);
       // Store the token in localStorage
+      console.log(result);
+      
       setAlert({ type: "success", message: "Login successful!" });
       setTimeout(() => setAlert({ type: "", message: "" }), 5000); // Dismiss after 5 seconds
-      localStorage.setItem("token", result.token);
+      localStorage.setItem("token", result?.token);
+      saveLogin(result); // Update global st
       // Delay navigation to allow alert to display
       setTimeout(() => {
         navigate("/dashboard");

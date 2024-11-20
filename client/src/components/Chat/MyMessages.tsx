@@ -3,11 +3,28 @@ import Sheet from '@mui/joy/Sheet';
 
 import MessagesPane from './MessagesPane.tsx';
 import ChatsPane from './ChatsPane.tsx';
-import { ChatProps } from '../../hooks/chats/chatTypes.tsx';
-import { chats } from '../../hooks/chats/data.tsx'
+// import { ChatProps } from '../../hooks/chats/chatTypes.tsx';
+// import { chats } from '../../hooks/chats/data.tsx'
+import AuthContext from '../../context/AuthContext.js';
+import { findUserChats } from '../../utils/chatService.js';
 
 export default function MyProfile() {
-    const [selectedChat, setSelectedChat] = React.useState<ChatProps>(chats[0]);
+    const [selectedChat, setSelectedChat] = React.useState();
+    const [chats, setChats] = React.useState();
+    const { userData } = React.useContext(AuthContext); // Check authentication state
+
+    React.useEffect(() => {
+
+        const fetchChats = async () => {
+            const userChats = await findUserChats(userData?._id);
+            setChats(userChats)
+            console.log(userChats);
+        }
+        if (userData?._id) {
+            console.log(userData);
+            fetchChats();
+        }
+    }, [userData])
     return (
         <Sheet
             sx={{
@@ -37,7 +54,7 @@ export default function MyProfile() {
             >
                 <ChatsPane
                     chats={chats}
-                    selectedChatId={selectedChat.id}
+                    selectedChatId={selectedChat?._id}
                     setSelectedChat={setSelectedChat}
                 />
             </Sheet>

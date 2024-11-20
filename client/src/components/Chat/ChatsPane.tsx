@@ -8,16 +8,11 @@ import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ChatListItem from './ChatListItem.tsx';
-import { ChatProps } from '../../hooks/chats/chatTypes';
+// import { ChatProps } from '../../hooks/chats/chatTypes';
 import { toggleMessagesPane } from '../../hooks/chats/chatFunctions';
 
-type ChatsPaneProps = {
-  chats: ChatProps[];
-  setSelectedChat: (chat: ChatProps) => void;
-  selectedChatId: string;
-};
 
-export default function ChatsPane(props: ChatsPaneProps) {
+export default function ChatsPane(props) {
   const { chats, setSelectedChat, selectedChatId } = props;
   return (
     <Sheet
@@ -86,9 +81,9 @@ export default function ChatsPane(props: ChatsPaneProps) {
           '--ListItem-paddingX': '1rem',
         }}
       >
-        {chats.map((chat) => (
+        {chats?.map((chat) => (
           <ChatListItem
-            key={chat.id}
+            key={chat?.id}
             {...chat}
             setSelectedChat={setSelectedChat}
             selectedChatId={selectedChatId}

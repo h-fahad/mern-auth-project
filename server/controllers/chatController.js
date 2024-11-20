@@ -4,7 +4,7 @@
 
 const ChatSchema = require("../models/ChatModel");
 
-const createChat = async (res, req) => {
+const createChat = async (req, res) => {
   const { user1, user2 } = req.body;
   try {
     const chat = await ChatSchema.findOne({
@@ -22,7 +22,7 @@ const createChat = async (res, req) => {
   }
 };
 
-const findUserChats = async (res, req) => {
+const findUserChats = async (req, res) => {
   const { userId } = req.params;
   try {
     const chats = await ChatSchema.find({ members: { $in: [userId] } });
@@ -33,8 +33,8 @@ const findUserChats = async (res, req) => {
   }
 };
 
-const findChats = async (res) => {
-  const { user1, user2 } = res.params;
+const findChats = async (req) => {
+  const { user1, user2 } = req.params;
   try {
     const chat = await ChatSchema.findOne({
       members: { $all: [user1, user2] },

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
 const chatRouter = require("./routes/chatRoute");
+const messageRouter = require("./routes/messageRoute");
 const { createServer } = require("node:http");
 const { join } = require("node:path");
 const { Server } = require("socket.io");
@@ -38,6 +39,7 @@ io.on("connection", (socket) => {
 //Auth Route
 app.use("/api/auth", authRouter);
 app.use("/api/chats", chatRouter);
+app.use("/api/messages", messageRouter);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

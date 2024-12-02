@@ -6,7 +6,7 @@ export type UserProps = {
   };
   
   export type MessageProps = {
-    id: string;
+    _id: string;
     content: string;
     timestamp: string;
     unread?: boolean;
@@ -19,8 +19,8 @@ export type UserProps = {
   };
   
   export type ChatProps = {
-    id: string;
-    sender: UserProps;
+    _id: string;
+    recipientUser: UserProps;
     messages: MessageProps[];
   };
   

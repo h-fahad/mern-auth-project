@@ -33,14 +33,20 @@ const findUserChats = async (req, res) => {
   }
 };
 
-const findChats = async (req) => {
+const findChats = async (req, res) => {
   const { user1, user2 } = req.params;
   try {
     const chat = await ChatSchema.findOne({
       members: { $all: [user1, user2] },
     });
+    console.log(chat);
     if (chat) {
       res.status(200).json(chat);
+    }
+    if (chat === null) {
+      const newChat = new ChatSchema({ members: [user1, user2] });
+      const response = await newChat.save();
+      res.status(201).json(response);
     }
   } catch (err) {
     console.error(err);

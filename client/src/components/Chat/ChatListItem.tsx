@@ -7,43 +7,49 @@ import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 import CircleIcon from '@mui/icons-material/Circle';
 import AvatarWithStatus from './AvatarWithStatus.tsx';
-import { toggleMessagesPane } from '../../hooks/chats/chatFunctions';
+import { toggleMessagesPane, useFetchRecipientUser } from '../../hooks/chats/chatFunctions';
 import { ChatProps, MessageProps, UserProps } from '../../hooks/chats/chatTypes';
 
 type ChatListItemProps = ListItemButtonProps & {
-  id: string;
+  _id: string;
   unread?: boolean;
-  sender: UserProps;
+  recipientUser: UserProps;
   messages: MessageProps[];
   selectedChatId?: string;
   setSelectedChat: (chat: ChatProps) => void;
+  members: UserProps[]; // Added members prop for group chats  (optional)
+  userData: { _id: string };
 };
 
 export default function ChatListItem(props: ChatListItemProps) {
-  const { id, sender, messages, selectedChatId, setSelectedChat } = props;
-  const selected = selectedChatId === id;
+  console.log(`ChatListItem`, props);
+
+  const { _id, messages, selectedChatId, setSelectedChat, members, userData } = props;
+  const { recipientUser = { username: "", online: false, avatar: "" } } = useFetchRecipientUser(members, userData)
+
+  const selected = selectedChatId === _id;
   return (
     <React.Fragment>
       <ListItem>
         <ListItemButton
           onClick={() => {
             toggleMessagesPane();
-            setSelectedChat({ id, sender, messages });
+            setSelectedChat({ _id, recipientUser, messages });
           }}
           selected={selected}
           color="neutral"
           sx={{ flexDirection: 'column', alignItems: 'initial', gap: 1 }}
         >
           <Stack direction="row" spacing={1.5}>
-            <AvatarWithStatus online={sender.online} src={sender.avatar} />
+            <AvatarWithStatus online={recipientUser?.online} src={recipientUser?.avatar} />
             <Box sx={{ flex: 1 }}>
-              <Typography level="title-sm">{sender.name}</Typography>
-              <Typography level="body-sm">{sender.username}</Typography>
+              <Typography level="title-sm">{recipientUser?.username || ''}</Typography>
+              <Typography level="body-sm">{"text Message"}</Typography>
             </Box>
             <Box sx={{ lineHeight: 1.5, textAlign: 'right' }}>
-              {messages[0].unread && (
-                <CircleIcon sx={{ fontSize: 12 }} color="primary" />
-              )}
+              {/* {messages[0]?.unread && ( */}
+              <CircleIcon sx={{ fontSize: 12 }} color="primary" />
+              {/* )} */}
               <Typography
                 level="body-xs"
                 noWrap
@@ -63,7 +69,7 @@ export default function ChatListItem(props: ChatListItemProps) {
               textOverflow: 'ellipsis',
             }}
           >
-            {messages[0].content}
+            {/* {messages[0]?.content} */}
           </Typography>
         </ListItemButton>
       </ListItem>

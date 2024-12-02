@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
+const userRouter = require("./routes/userRoute");
 const chatRouter = require("./routes/chatRoute");
 const messageRouter = require("./routes/messageRoute");
 const { createServer } = require("node:http");
@@ -38,6 +39,7 @@ io.on("connection", (socket) => {
 
 //Auth Route
 app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
 app.use("/api/chats", chatRouter);
 app.use("/api/messages", messageRouter);
 

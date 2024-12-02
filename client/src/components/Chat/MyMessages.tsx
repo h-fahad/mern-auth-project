@@ -18,7 +18,7 @@ export default function MyProfile() {
         const fetchChats = async () => {
             const userChats = await findUserChats(userData?._id);
             setChats(userChats)
-            console.log(userChats);
+            console.log(userChats, "chats");
         }
         if (userData?._id) {
             console.log(userData);
@@ -56,6 +56,7 @@ export default function MyProfile() {
                     chats={chats}
                     selectedChatId={selectedChat?._id}
                     setSelectedChat={setSelectedChat}
+                    userData={userData}
                 />
             </Sheet>
             <MessagesPane chat={selectedChat} />

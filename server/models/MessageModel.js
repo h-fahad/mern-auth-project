@@ -6,7 +6,7 @@ const MessageSchema = new mongoose.Schema(
     senderId: { type: String, required: true },
     text: { type: String, required: true },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Message", MessageSchema);

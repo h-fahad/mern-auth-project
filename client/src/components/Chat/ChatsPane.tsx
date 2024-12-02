@@ -12,8 +12,8 @@ import ChatListItem from './ChatListItem.tsx';
 import { toggleMessagesPane } from '../../hooks/chats/chatFunctions';
 
 
-export default function ChatsPane(props) {
-  const { chats, setSelectedChat, selectedChatId } = props;
+export default function ChatsPane(props: any) {
+  const { chats, setSelectedChat, selectedChatId, userData } = props;
   return (
     <Sheet
       sx={{
@@ -87,6 +87,7 @@ export default function ChatsPane(props) {
             {...chat}
             setSelectedChat={setSelectedChat}
             selectedChatId={selectedChatId}
+            userData={userData}
           />
         ))}
       </List>

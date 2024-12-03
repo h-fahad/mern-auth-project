@@ -1,10 +1,7 @@
 import * as React from 'react';
 import Sheet from '@mui/joy/Sheet';
-
 import MessagesPane from './MessagesPane.tsx';
 import ChatsPane from './ChatsPane.tsx';
-// import { ChatProps } from '../../hooks/chats/chatTypes.tsx';
-// import { chats } from '../../hooks/chats/data.tsx'
 import AuthContext from '../../context/AuthContext.js';
 import { findUserChats } from '../../utils/chatService.js';
 
@@ -59,7 +56,9 @@ export default function MyProfile() {
                     userData={userData}
                 />
             </Sheet>
-            <MessagesPane chat={selectedChat} />
+            <MessagesPane chat={selectedChat}
+                userData={userData}
+            />
         </Sheet>
     );
 }

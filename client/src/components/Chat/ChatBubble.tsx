@@ -15,7 +15,7 @@ type ChatBubbleProps = MessageProps & {
 };
 
 export default function ChatBubble(props: ChatBubbleProps) {
-  const { content, variant, timestamp, attachment = undefined, sender } = props;
+  const { text, variant, timestamp, attachment = undefined, sender, isYou } = props;
   const isSent = variant === 'sent';
   const [isHovered, setIsHovered] = React.useState<boolean>(false);
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
@@ -28,7 +28,7 @@ export default function ChatBubble(props: ChatBubbleProps) {
         sx={{ justifyContent: 'space-between', mb: 0.25 }}
       >
         <Typography level="body-xs">
-          {sender === 'You' ? sender : sender.name}
+          {isYou ? sender : sender?.name}
         </Typography>
         <Typography level="body-xs">{timestamp}</Typography>
       </Stack>
@@ -104,7 +104,7 @@ export default function ChatBubble(props: ChatBubbleProps) {
                     },
               ]}
             >
-              {content}
+              {text}
             </Typography>
           </Sheet>
           {(isHovered || isLiked || isCelebrated) && (

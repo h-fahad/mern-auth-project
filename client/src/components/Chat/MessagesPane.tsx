@@ -7,15 +7,26 @@ import MessagesPaneHeader from './MessagesPaneHeader.tsx';
 import ChatBubble from './ChatBubble.tsx';
 import AvatarWithStatus from './AvatarWithStatus.tsx';
 import { MessageProps } from '../../hooks/chats/chatTypes';
+import { getChatMessagesById } from '../../utils/chatService.js';
 
 export default function MessagesPane(props) {
-  const { chat } = props;
-  const [chatMessages, setChatMessages] = React.useState(chat?.messages);
+  const { chat, userData } = props;
+  const [chatMessages, setChatMessages] = React.useState([{
+    senderId: "",
+    text: ""
+  }]);
   const [textAreaValue, setTextAreaValue] = React.useState('');
 
   React.useEffect(() => {
-    setChatMessages(chat?.messages);
-  }, [chat?.messages]);
+    const fetchChats = async () => {
+      const messages = await getChatMessagesById(chat?._id);
+      console.log(messages, "messages");
+      setChatMessages(messages)
+    }
+    if (chat?._id) {
+      fetchChats();
+    }
+  }, [chat]);
 
   return (
     <Sheet
@@ -26,7 +37,7 @@ export default function MessagesPane(props) {
         backgroundColor: 'background.level1',
       }}
     >
-      <MessagesPaneHeader sender={chat?.sender} />
+      <MessagesPaneHeader sender={chat?.recipientUser} />
       <Box
         sx={{
           display: 'flex',
@@ -39,8 +50,8 @@ export default function MessagesPane(props) {
         }}
       >
         <Stack spacing={2} sx={{ justifyContent: 'flex-end' }}>
-          {chatMessages?.map((message: MessageProps, index: number) => {
-            const isYou = message?.sender === 'You';
+          {chatMessages?.map((message: any, index: number) => {
+            const isYou = message?.senderId === userData?._id;
             return (
               <Stack
                 key={index}
@@ -48,13 +59,13 @@ export default function MessagesPane(props) {
                 spacing={2}
                 sx={{ flexDirection: isYou ? 'row-reverse' : 'row' }}
               >
-                {message?.sender !== 'You' && (
+                {message?.senderId !== userData?._id && (
                   <AvatarWithStatus
                     online={message?.sender?.online}
                     src={message?.sender?.avatar}
                   />
                 )}
-                <ChatBubble variant={isYou ? 'sent' : 'received'} {...message} />
+                <ChatBubble variant={isYou ? 'sent' : 'received'} sender={chat?.recipientUser} {...message} />
               </Stack>
             );
           })}
@@ -69,8 +80,8 @@ export default function MessagesPane(props) {
           setChatMessages([
             ...chatMessages,
             {
-              id: newIdString,
-              sender: 'You',
+              _id: newIdString,
+              sender: userData?._id,
               content: textAreaValue,
               timestamp: 'Just now',
             },

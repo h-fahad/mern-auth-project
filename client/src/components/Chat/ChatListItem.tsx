@@ -8,13 +8,12 @@ import Typography from '@mui/joy/Typography';
 import CircleIcon from '@mui/icons-material/Circle';
 import AvatarWithStatus from './AvatarWithStatus.tsx';
 import { toggleMessagesPane, useFetchRecipientUser } from '../../hooks/chats/chatFunctions';
-import { ChatProps, MessageProps, UserProps } from '../../hooks/chats/chatTypes';
+import { ChatProps, UserProps } from '../../hooks/chats/chatTypes';
 
 type ChatListItemProps = ListItemButtonProps & {
   _id: string;
   unread?: boolean;
   recipientUser: UserProps;
-  messages: MessageProps[];
   selectedChatId?: string;
   setSelectedChat: (chat: ChatProps) => void;
   members: UserProps[]; // Added members prop for group chats  (optional)
@@ -22,9 +21,7 @@ type ChatListItemProps = ListItemButtonProps & {
 };
 
 export default function ChatListItem(props: ChatListItemProps) {
-  console.log(`ChatListItem`, props);
-
-  const { _id, messages, selectedChatId, setSelectedChat, members, userData } = props;
+  const { _id, selectedChatId, setSelectedChat, members, userData } = props;
   const { recipientUser = { username: "", online: false, avatar: "" } } = useFetchRecipientUser(members, userData)
 
   const selected = selectedChatId === _id;
@@ -34,7 +31,7 @@ export default function ChatListItem(props: ChatListItemProps) {
         <ListItemButton
           onClick={() => {
             toggleMessagesPane();
-            setSelectedChat({ _id, recipientUser, messages });
+            setSelectedChat({ _id, recipientUser });
           }}
           selected={selected}
           color="neutral"
